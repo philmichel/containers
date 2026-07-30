@@ -10,7 +10,9 @@ on:
     branches: [main]
     paths: [apps/**]
   schedule:
-    - cron: '0 5 * * 1' # weekly rebuild to pick up base-image fixes
+    # monthly rebuild: refreshes apk-added packages on images whose
+    # upstream releases rarely; fast movers rebuild on FROM bumps anyway
+    - cron: '0 5 1 * *'
 
 permissions: {}
 
