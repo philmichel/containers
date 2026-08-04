@@ -2,9 +2,9 @@
   $schema: 'https://docs.renovatebot.com/renovate-schema.json',
   extends: ['github>philmichel/renovate-config'],
   packageRules: [
-    // Merging here only publishes the image -- the deploy gate is the image
-    // bump PR in home-ops, which stays manual. The PR build (multi-arch, no
-    // push) is the only check that matters, so ignoreTests must stay false.
+    // Merging only publishes the image -- nothing deploys from it. The PR
+    // build (multi-arch, no push) is the only real check, so ignoreTests
+    // must stay false.
     {
       description: 'Auto-merge base image digest rebuilds',
       matchDatasources: ['docker'],
