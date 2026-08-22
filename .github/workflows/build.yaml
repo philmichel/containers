@@ -26,20 +26,24 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        app: [opencode]
+        app: [opencode, baikal]
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
-      # image tags track the upstream version pinned in the FROM line
+      # image tags track the upstream version: an annotated *_VERSION env
+      # (zip-download images) or the FROM pin (derived images)
       - name: Extract upstream version
         id: version
         env:
           APP: ${{ matrix.app }}
         run: |
-          version=$(awk -F'[:@ ]' '/^FROM/ {print $3; exit}' "apps/${APP}/Dockerfile")
+          version=$(awk -F'[= ]' '/^(ENV|ARG) [A-Za-z0-9_]+_VERSION=/ {print $3; exit}' "apps/${APP}/Dockerfile")
+          if [ -z "${version}" ]; then
+            version=$(awk -F'[:@ ]' '/^FROM/ {print $3; exit}' "apps/${APP}/Dockerfile")
+          fi
           echo "version=${version}" >> "$GITHUB_OUTPUT"
 
       - name: Setup QEMU
