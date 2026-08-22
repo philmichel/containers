@@ -1,11 +1,23 @@
 {
   $schema: 'https://docs.renovatebot.com/renovate-schema.json',
-  extends: ['github>philmichel/renovate-config'],
+  extends: [
+    'github>philmichel/renovate-config',
+    'customManagers:dockerfileVersions',
+  ],
   packageRules: [
     {
       description: 'Auto-merge base image updates',
       matchDatasources: ['docker'],
       matchUpdateTypes: ['digest', 'patch', 'minor', 'major'],
+      automerge: true,
+      automergeType: 'pr',
+      platformAutomerge: false,
+      ignoreTests: false,
+    },
+    {
+      description: 'Auto-merge packaged upstream release bumps (baikal)',
+      matchDatasources: ['github-releases'],
+      matchUpdateTypes: ['patch', 'minor', 'major'],
       automerge: true,
       automergeType: 'pr',
       platformAutomerge: false,
