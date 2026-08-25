@@ -1,4 +1,4 @@
-FROM ghcr.io/anomalyco/opencode:1.18.22@sha256:647ce639f66ff520e7b149bd86963ac555d820887cce051647b396ea0fd5d7f9
+FROM ghcr.io/anomalyco/opencode:1.18.23@sha256:182959d5ae507fa2b3dcfd6ec247ad625b7f15539977dd0620f43f7e24c78229
 
 LABEL org.opencontainers.image.source=https://github.com/philmichel/containers
 LABEL org.opencontainers.image.description="opencode with git and a small agent toolbox"
