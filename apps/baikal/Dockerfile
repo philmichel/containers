@@ -6,7 +6,7 @@ ENV BAIKAL_VERSION=0.12.1
 ADD https://github.com/sabre-io/Baikal/releases/download/$BAIKAL_VERSION/baikal-$BAIKAL_VERSION.zip .
 RUN apk add --no-cache unzip && unzip -q baikal-$BAIKAL_VERSION.zip
 
-FROM nginx:1@sha256:4fee1824d2ad02ba8ca5909f2dfb1c53943a3a198e037d3246dad5db92141a8a
+FROM nginx:1@sha256:f0002216f237d3736e51fa3ecae6647663b9ebdf9b702e0f1ba59ea3a3055ee1
 
 LABEL org.opencontainers.image.source=https://github.com/philmichel/containers
 LABEL org.opencontainers.image.description="Baikal CalDAV/CardDAV server on nginx + PHP, continuing the unmaintained aalmenar/baikal-docker image"
