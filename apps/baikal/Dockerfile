@@ -1,4 +1,4 @@
-FROM alpine:3.24@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a AS builder
+FROM alpine:3.24@sha256:ce9e1e6d23f04a0b7593445a062a9fc73ed52f8260b9396f77a958295ad18ee7 AS builder
 
 # renovate: datasource=github-releases depName=sabre-io/Baikal
 ENV BAIKAL_VERSION=0.13.0
