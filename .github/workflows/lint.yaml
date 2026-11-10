@@ -57,19 +57,13 @@ jobs:
             .github/workflows/*.yaml
             .github/workflows/*.yml
 
-      - name: Install zizmor
-        if: steps.changed-files.outputs.changed_files != '[]'
-        shell: bash
-        run: |
-          pip install --user zizmor
-
       - name: Run zizmor
         if: steps.changed-files.outputs.changed_files != '[]'
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          zizmor ${{ join(fromJSON(steps.changed-files.outputs.changed_files), ' ') }}
+        uses: zizmorcore/zizmor-action@45d7276c9ca790aabd705e31ca99c6185c3e76dd # v0.8.1
+        with:
+          inputs: ${{ join(fromJSON(steps.changed-files.outputs.changed_files), ' ') }}
+          advanced-security: false
+          annotations: true
 
   lint_success:
     needs:
