@@ -1,0 +1,84 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Lint
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  actionlint:
+    name: actionlint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Get changed files
+        id: changed-files
+        uses: bjw-s-labs/action-changed-files@147be9638332cf68fd60714a610509d7a9360d60 # v0.7.0
+        with:
+          patterns: |-
+            .github/workflows/*.yaml
+            .github/workflows/*.yml
+
+      - name: Run actionlint
+        if: steps.changed-files.outputs.changed_files != '[]'
+        uses: bjw-s/action-actionlint@b346813e82708106544f48a93a5b3fbeeb8e37eb # v0.1.1
+        with:
+          file_pattern: ${{ join(fromJSON(steps.changed-files.outputs.changed_files), ' ') }}
+
+  zizmor:
+    name: zizmor
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Get changed files
+        id: changed-files
+        uses: bjw-s-labs/action-changed-files@147be9638332cf68fd60714a610509d7a9360d60 # v0.7.0
+        with:
+          patterns: |-
+            .github/workflows/*.yaml
+            .github/workflows/*.yml
+
+      - name: Install zizmor
+        if: steps.changed-files.outputs.changed_files != '[]'
+        shell: bash
+        run: |
+          pip install --user zizmor
+
+      - name: Run zizmor
+        if: steps.changed-files.outputs.changed_files != '[]'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          zizmor ${{ join(fromJSON(steps.changed-files.outputs.changed_files), ' ') }}
+
+  lint_success:
+    needs:
+      - actionlint
+      - zizmor
+    if: ${{ !cancelled() }}
+    name: Lint successful
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check job status
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: exit 1
