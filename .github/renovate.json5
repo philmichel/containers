@@ -23,5 +23,12 @@
       platformAutomerge: false,
       ignoreTests: false,
     },
+    {
+      description: 'Automerge shared GitHub Actions rules via PRs',
+      matchManagers: ['github-actions'],
+      automergeType: 'pr',
+      platformAutomerge: false,
+      ignoreTests: false,
+    },
   ],
 }
